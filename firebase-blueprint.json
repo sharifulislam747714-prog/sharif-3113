@@ -1,0 +1,31 @@
+{
+  "entities": {
+    "ProfileSettings": {
+      "title": "Profile Settings",
+      "description": "Stores global settings for the profile, like the profile image URL.",
+      "type": "object",
+      "properties": {
+        "imageUrl": {
+          "type": "string",
+          "description": "The URL or base64 string of the profile image."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the image was last updated."
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "The UID of the user who updated the image."
+        }
+      },
+      "required": ["imageUrl"]
+    }
+  },
+  "firestore": {
+    "/settings/profile": {
+      "schema": "ProfileSettings",
+      "description": "The document containing the profile image information."
+    }
+  }
+}

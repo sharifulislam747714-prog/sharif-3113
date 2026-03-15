@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: settings
+    // Document ID: profile
+    // Fields:
+    //   - imageUrl: string (required) - The profile image URL or base64
+    //   - updatedAt: string (optional) - ISO timestamp
+    //   - updatedBy: string (optional) - User UID
+    //
+    // ===============================================================
+
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner() {
+      return isAuthenticated() && 
+        (request.auth.token.email == "sharifulislam747714@gmail.com" && request.auth.token.email_verified == true);
+    }
+
+    function isValidProfile(data) {
+      return data.keys().hasAll(['imageUrl']) &&
+             data.imageUrl is string &&
+             data.imageUrl.size() < 2000000; // Limit to ~2MB for base64
+    }
+
+    match /settings/profile {
+      allow read: if true;
+      allow write: if isOwner() && isValidProfile(request.resource.data);
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
