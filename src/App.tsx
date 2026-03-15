@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { motion } from "motion/react";
 import { 
   Mail, 
@@ -16,14 +16,12 @@ import {
   CheckCircle2, 
   ExternalLink,
   ChevronRight,
-  Download,
-  Camera
+  Download
 } from "lucide-react";
 import { cvData } from "./constants";
 
-const Section = ({ children, className = "", id }: { children: React.ReactNode; className?: string; id?: string }) => (
+const Section = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <motion.section 
-    id={id}
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
@@ -38,61 +36,46 @@ export default function App() {
   const profileImage = "https://i.postimg.cc/rwL2726X/edited-photo-fixed2.png";
 
   return (
-    <div className="min-h-screen bg-surface">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <span className="font-bold text-xl tracking-tight text-primary">MSI.</span>
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted">
-            <a href="#summary" className="hover:text-accent transition-colors">About</a>
-            <a href="#skills" className="hover:text-accent transition-colors">Skills</a>
-            <a href="#experience" className="hover:text-accent transition-colors">Experience</a>
-            <a href="#contact" className="hover:text-accent transition-colors">Contact</a>
-          </div>
-          <button 
-            onClick={() => window.print()}
-            className="bg-primary text-white text-sm font-bold py-2 px-5 rounded-lg hover:bg-slate-800 transition-all flex items-center gap-2"
-          >
-            <Download size={16} /> CV
-          </button>
-        </div>
-      </nav>
-
+    <div className="min-h-screen">
       {/* Hero Section */}
-      <header className="relative bg-white border-b border-slate-200 overflow-hidden">
-        <div className="max-w-6xl mx-auto px-6 py-16 md:py-24 relative z-10">
-          <div className="flex flex-col md:flex-row items-center gap-12 md:gap-20">
+      <header className="relative bg-primary text-white overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-accent rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+        </div>
+
+        <div className="max-w-6xl mx-auto px-6 py-20 md:py-32 relative z-10">
+          <div className="flex flex-col md:flex-row items-center gap-12">
             <motion.div 
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="relative"
+              className="relative group"
             >
-              <div className="w-64 h-64 md:w-80 md:h-80 rounded-2xl overflow-hidden shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500">
+              <div className="w-64 h-64 md:w-80 md:h-80 rounded-full border-4 border-secondary/30 p-2 overflow-hidden bg-white/10 backdrop-blur-sm relative">
                 <img 
                   src={profileImage} 
                   alt={cvData.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded-full"
                   referrerPolicy="no-referrer"
                 />
               </div>
-              <div className="absolute -bottom-6 -right-6 bg-accent text-white font-bold py-3 px-6 rounded-xl shadow-xl z-20 hidden sm:block">
+              <motion.div 
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5 }}
+                className="absolute -bottom-4 -right-4 bg-secondary text-primary font-bold py-2 px-6 rounded-full shadow-lg z-20"
+              >
                 Available for Work
-              </div>
+              </motion.div>
             </motion.div>
 
             <div className="text-center md:text-left flex-1">
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="inline-block px-3 py-1 rounded-full bg-blue-50 text-accent text-xs font-bold uppercase tracking-widest mb-4"
-              >
-                Professional Portfolio
-              </motion.div>
               <motion.h1 
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 tracking-tight text-primary"
+                className="font-serif text-5xl md:text-7xl font-bold mb-4"
               >
                 {cvData.name}
               </motion.h1>
@@ -100,7 +83,7 @@ export default function App() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-xl md:text-2xl text-muted font-medium mb-8 max-w-2xl"
+                className="text-xl md:text-2xl text-accent font-medium mb-8"
               >
                 {cvData.title}
               </motion.p>
@@ -109,17 +92,34 @@ export default function App() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="flex flex-col sm:flex-row flex-wrap justify-center md:justify-start gap-4 sm:gap-8 text-sm md:text-base text-muted"
+                className="flex flex-wrap justify-center md:justify-start gap-6 text-sm md:text-base opacity-90"
               >
-                <a href={`mailto:${cvData.email}`} className="flex items-center gap-2 hover:text-accent transition-colors">
-                  <div className="p-2 bg-slate-100 rounded-lg"><Mail size={18} /></div> {cvData.email}
+                <a href={`mailto:${cvData.email}`} className="flex items-center gap-2 hover:text-secondary transition-colors">
+                  <Mail size={18} /> {cvData.email}
                 </a>
-                <a href={`tel:${cvData.phone}`} className="flex items-center gap-2 hover:text-accent transition-colors">
-                  <div className="p-2 bg-slate-100 rounded-lg"><Phone size={18} /></div> {cvData.phone}
+                <a href={`tel:${cvData.phone}`} className="flex items-center gap-2 hover:text-secondary transition-colors">
+                  <Phone size={18} /> {cvData.phone}
                 </a>
                 <span className="flex items-center gap-2">
-                  <div className="p-2 bg-slate-100 rounded-lg"><MapPin size={18} /></div> {cvData.location}
+                  <MapPin size={18} /> {cvData.location}
                 </span>
+              </motion.div>
+
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className="mt-10 flex flex-wrap justify-center md:justify-start gap-4"
+              >
+                <button className="bg-secondary hover:bg-amber-600 text-primary font-bold py-3 px-8 rounded-xl transition-all flex items-center gap-2 shadow-lg hover:scale-105">
+                  Contact Me <ExternalLink size={18} />
+                </button>
+                <button 
+                  onClick={() => window.print()}
+                  className="bg-white/10 hover:bg-white/20 border border-white/30 py-3 px-8 rounded-xl transition-all flex items-center gap-2 backdrop-blur-sm"
+                >
+                  Download CV <Download size={18} />
+                </button>
               </motion.div>
             </div>
           </div>
@@ -127,44 +127,37 @@ export default function App() {
       </header>
 
       {/* Summary Section */}
-      <Section id="summary">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-          <div className="lg:col-span-1">
-            <h2 className="section-title">About Me</h2>
-            <p className="text-muted font-medium italic">
-              "A dedicated, fast-learning, and versatile professional with a unique blend of digital expertise and financial knowledge."
-            </p>
-          </div>
-          <div className="lg:col-span-2 glass-card p-8 md:p-10">
-            <p className="text-lg leading-relaxed text-slate-600">
-              {cvData.summary}
-            </p>
-          </div>
+      <Section>
+        <div className="glass-card p-8 md:p-12">
+          <h2 className="section-title">Professional Summary</h2>
+          <p className="text-lg leading-relaxed text-slate-600">
+            {cvData.summary}
+          </p>
         </div>
       </Section>
 
       {/* Competencies Section */}
-      <Section id="skills" className="bg-slate-50 border-y border-slate-200">
-        <h2 className="section-title">Core Competencies</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <Section className="bg-slate-100/50">
+        <h2 className="section-title">Core Competencies & Skills</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {cvData.competencies.map((comp, idx) => (
             <motion.div 
               key={comp.category}
               whileHover={{ y: -5 }}
-              className="glass-card p-8"
+              className="glass-card p-6 flex flex-col"
             >
-              <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 text-accent">
-                {idx === 0 && <Briefcase size={28} />}
-                {idx === 1 && <ExternalLink size={28} />}
-                {idx === 2 && <CheckCircle2 size={28} />}
-                {idx === 3 && <User size={28} />}
-                {idx === 4 && <Languages size={28} />}
+              <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 text-primary">
+                {idx === 0 && <Briefcase size={24} />}
+                {idx === 1 && <ExternalLink size={24} />}
+                {idx === 2 && <CheckCircle2 size={24} />}
+                {idx === 3 && <User size={24} />}
+                {idx === 4 && <Languages size={24} />}
               </div>
               <h3 className="text-xl font-bold mb-4 text-primary">{comp.category}</h3>
-              <ul className="space-y-3">
+              <ul className="space-y-2 flex-1">
                 {comp.skills.map(skill => (
-                  <li key={skill} className="flex items-center gap-3 text-slate-600 text-sm font-medium">
-                    <div className="w-1.5 h-1.5 rounded-full bg-accent/40" />
+                  <li key={skill} className="flex items-center gap-2 text-slate-600">
+                    <ChevronRight size={14} className="text-secondary" />
                     {skill}
                   </li>
                 ))}
@@ -175,28 +168,24 @@ export default function App() {
       </Section>
 
       {/* Education & Experience */}
-      <div id="experience" className="grid grid-cols-1 lg:grid-cols-2 max-w-6xl mx-auto px-6 gap-16 py-24">
+      <div className="grid grid-cols-1 lg:grid-cols-2 max-w-6xl mx-auto px-6 gap-12 py-16">
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
         >
           <h2 className="section-title">Education</h2>
-          <div className="space-y-10">
+          <div className="space-y-8">
             {cvData.education.map((edu) => (
-              <div key={edu.degree} className="relative pl-10 border-l-2 border-slate-200">
-                <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-white border-4 border-accent shadow-sm" />
-                <span className="text-accent font-bold text-xs uppercase tracking-widest block mb-2">{edu.year}</span>
-                <h3 className="text-xl font-bold text-primary mb-1">{edu.degree}</h3>
-                <p className="text-muted font-medium mb-3">{edu.institution}</p>
+              <div key={edu.degree} className="relative pl-8 border-l-2 border-primary/20">
+                <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-primary border-4 border-white shadow-sm" />
+                <span className="text-secondary font-bold text-sm block mb-1">{edu.year}</span>
+                <h3 className="text-xl font-bold text-primary">{edu.degree}</h3>
+                <p className="text-slate-500 mb-2">{edu.institution}</p>
                 {edu.details.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {edu.details.map(detail => (
-                      <span key={detail} className="bg-slate-100 text-slate-600 text-[10px] font-bold uppercase px-2 py-1 rounded">
-                        {detail}
-                      </span>
-                    ))}
-                  </div>
+                  <ul className="text-slate-600 text-sm space-y-1">
+                    {edu.details.map(detail => <li key={detail}>• {detail}</li>)}
+                  </ul>
                 )}
               </div>
             ))}
@@ -209,18 +198,14 @@ export default function App() {
           viewport={{ once: true }}
         >
           <h2 className="section-title">Experience</h2>
-          <div className="glass-card p-10 border-l-4 border-accent relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -translate-y-1/2 translate-x-1/2 opacity-50" />
-            <div className="flex items-center gap-4 mb-6 relative z-10">
-              <div className="p-3 bg-blue-50 rounded-xl text-accent">
-                <Briefcase size={28} />
+          <div className="glass-card p-8 border-l-4 border-secondary">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-secondary/10 rounded-lg text-secondary">
+                <Briefcase size={24} />
               </div>
-              <div>
-                <h3 className="text-2xl font-bold text-primary">{cvData.experience.role}</h3>
-                <span className="text-xs font-bold text-muted uppercase tracking-widest">Current Status</span>
-              </div>
+              <h3 className="text-2xl font-bold text-primary">{cvData.experience.role}</h3>
             </div>
-            <p className="text-slate-600 leading-relaxed relative z-10">
+            <p className="text-slate-600 leading-relaxed">
               {cvData.experience.description}
             </p>
           </div>
@@ -228,27 +213,27 @@ export default function App() {
       </div>
 
       {/* Languages & Personal Info */}
-      <Section id="contact" className="bg-primary text-white rounded-[2rem] mb-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+      <Section className="bg-primary text-white">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           <div>
-            <h2 className="section-title text-white before:bg-accent">Language Proficiency</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <h2 className="section-title text-white after:bg-secondary">Language Proficiency</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {cvData.languages.map((lang) => (
-                <div key={lang.language} className="bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
-                  <h4 className="font-bold text-accent mb-1">{lang.language}</h4>
-                  <p className="text-sm opacity-70">{lang.proficiency}</p>
+                <div key={lang.language} className="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/10">
+                  <h4 className="font-bold text-secondary mb-1">{lang.language}</h4>
+                  <p className="text-sm opacity-80">{lang.proficiency}</p>
                 </div>
               ))}
             </div>
           </div>
           
           <div>
-            <h2 className="section-title text-white before:bg-accent">Personal Details</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-12">
+            <h2 className="section-title text-white after:bg-secondary">Personal Information</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
               {cvData.personalInfo.map((info) => (
-                <div key={info.label} className="border-b border-white/10 pb-3">
-                  <span className="text-[10px] uppercase tracking-widest opacity-50 block mb-1 font-bold">{info.label}</span>
-                  <span className="font-medium text-sm">{info.value}</span>
+                <div key={info.label} className="border-b border-white/10 pb-2">
+                  <span className="text-xs uppercase tracking-wider opacity-60 block mb-1">{info.label}</span>
+                  <span className="font-medium">{info.value}</span>
                 </div>
               ))}
             </div>
@@ -257,16 +242,14 @@ export default function App() {
       </Section>
 
       {/* Footer */}
-      <footer className="py-16 px-6 text-center">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex justify-center gap-4 mb-8">
-            <a href={`mailto:${cvData.email}`} className="w-12 h-12 flex items-center justify-center rounded-full bg-white border border-slate-200 text-slate-400 hover:text-accent hover:border-accent transition-all"><Mail size={20} /></a>
-            <a href={`tel:${cvData.phone}`} className="w-12 h-12 flex items-center justify-center rounded-full bg-white border border-slate-200 text-slate-400 hover:text-accent hover:border-accent transition-all"><Phone size={20} /></a>
-            <a href="#" className="w-12 h-12 flex items-center justify-center rounded-full bg-white border border-slate-200 text-slate-400 hover:text-accent hover:border-accent transition-all"><MapPin size={20} /></a>
-          </div>
-          <p className="text-muted text-sm font-medium">
-            © {new Date().getFullYear()} {cvData.name}. Designed with precision.
-          </p>
+      <footer className="py-12 px-6 text-center border-t border-slate-200">
+        <p className="text-slate-500 mb-4">
+          © {new Date().getFullYear()} {cvData.name}. All rights reserved.
+        </p>
+        <div className="flex justify-center gap-6">
+          <a href="#" className="text-slate-400 hover:text-primary transition-colors"><Mail size={20} /></a>
+          <a href="#" className="text-slate-400 hover:text-primary transition-colors"><Phone size={20} /></a>
+          <a href="#" className="text-slate-400 hover:text-primary transition-colors"><MapPin size={20} /></a>
         </div>
       </footer>
     </div>
